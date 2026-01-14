@@ -1,0 +1,11 @@
+{
+  "name": "Jordan Weal",
+  "age": 33,
+  "city": "Moscow",
+  "from_country": "US",
+  "player": "Dynamo",
+  "liga": [
+    "NHL",
+    "KHL"
+  ]
+}

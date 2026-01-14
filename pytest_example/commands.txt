@@ -1,0 +1,23 @@
+# Запуск всех тестов в текущей директории
+pytest
+
+# Запуск конкретного файла
+pytest test_calculator.py
+
+# Запуск конкретного теста
+pytest test_calculator.py::test_add_positive_numbers
+
+# Подробный вывод
+pytest -v
+
+# Показать локальные переменные при ошибках
+pytest -l
+
+# Остановиться на первой ошибке
+pytest -x
+
+# Показать покрытие кода (нужен pytest-cov)
+pytest --cov
+
+# Запуск в тихом режиме
+pytest -q

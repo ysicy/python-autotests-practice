@@ -1,0 +1,85 @@
+Что такое REST API?
+REST (Representational State Transfer) - это архитектурный стиль для создания веб-сервисов. Это самый популярный подход к построению API в современном мире.
+
+Принципы REST:
+Stateless (Без состояния) - каждый запрос независим
+Resource-based (Основан на ресурсах) - все данные представлены как ресурсы
+HTTP методы - используют стандартные HTTP глаголы
+JSON формат - обмен данными в JSON
+Единообразные URL - предсказуемая структура адресов
+REST vs обычные функции
+Обычная функция:
+
+
+python
+def get_user_by_id(user_id):
+    return database.find_user(user_id)
+
+def create_new_user(user_data):
+    return database.insert_user(user_data)
+REST API:
+
+
+bash
+GET    /users/123     - получить пользователя
+POST   /users         - создать пользователя
+PUT    /users/123     - обновить пользователя
+DELETE /users/123     - удалить пользователя
+HTTP методы и их назначение
+CRUD операции
+Create (Создание)
+
+HTTP метод: POST
+Пример URL: POST /users
+Описание: Создать новый ресурс
+Read (Чтение)
+
+HTTP метод: GET
+Пример URL: GET /users/123
+Описание: Получить ресурс
+Update (Обновление)
+
+HTTP метод: PUT/PATCH
+Пример URL: PUT /users/123
+Описание: Обновить ресурс
+Delete (Удаление)
+
+HTTP метод: DELETE
+Пример URL: DELETE /users/123
+Описание: Удалить ресурс
+Разница между PUT и PATCH
+
+python
+# PUT - полная замена ресурса
+user_data = {
+    "id": 123,
+    "name": "Новое имя",
+    "email": "new@email.com",
+    "phone": "123-456-7890"
+}
+requests.put('/users/123', json=user_data)
+
+# PATCH - частичное обновление
+partial_data = {
+    "name": "Только новое имя"  # Остальные поля не изменятся
+}
+requests.patch('/users/123', json=partial_data)
+HTTP статус коды
+Основные группы статус кодов:
+2xx - Успех:
+
+200 OK - запрос выполнен успешно
+201 Created - ресурс создан
+204 No Content - успех, но нет содержимого
+4xx - Ошибки клиента:
+
+400 Bad Request - неверный запрос
+401 Unauthorized - требуется авторизация
+403 Forbidden - доступ запрещен
+404 Not Found - ресурс не найден
+422 Unprocessable Entity - ошибка валидации
+5xx - Ошибки сервера:
+
+500 Internal Server Error - внутренняя ошибка сервера
+502 Bad Gateway - ошибка шлюза
+503 Service Unavailable - сервис недоступен
