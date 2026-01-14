@@ -4,13 +4,46 @@
 # Найти дубликаты в списке чисел
 # Вход: [1,2,3,2,4,1]
 # Выход: {1,2}
-#
+
+def find_duplicates(lst):
+    seen = set()  # Множество для уже увиденных чисел
+    duplicates = set()  # Множество для дубликатов
+
+    for number in lst:
+        if number in seen:  # Если уже видели это число
+            duplicates.add(number)  # Добавляем в дубликаты
+        else:
+            seen.add(number)  # Иначе добавляем в увиденные
+
+    return duplicates
+
+
+print(find_duplicates([1, 2, 3, 2, 4, 1]))  # Вывод: {1, 2}
+
 # Подсчитать количество каждого символа в строке
 # "hello world" → {'h':1,'e':1,'l':3,...}
-#
+def count_symbols(string):
+    slovar = {}
+    for i in string:
+        if i in slovar:
+            slovar[i] = slovar[i] + 1
+        else:
+            slovar[i] = 1
+    print(slovar)
+
+
+
+count_symbols("hello world")
 # Отфильтровать только уникальные элементы, сохранив порядок
 # [1,2,2,3,1] → [1,2,3]
-#
+def check_unique(lst):
+    unique = []
+    for number in lst:
+        if number not in unique:
+            unique.append(number)
+    print(unique)
+
+check_unique([1,2,2,3,1])
 # Найти второй по величине элемент в списке
 # (с учетом дублей)
 #
