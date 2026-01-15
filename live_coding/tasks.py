@@ -4,6 +4,8 @@
 # Найти дубликаты в списке чисел
 # Вход: [1,2,3,2,4,1]
 # Выход: {1,2}
+from shlex import split
+
 
 def find_duplicates(lst):
     seen = set()  # Множество для уже увиденных чисел
@@ -29,11 +31,9 @@ def count_symbols(string):
             slovar[i] = slovar[i] + 1
         else:
             slovar[i] = 1
-    print(slovar)
+    return slovar
+print(count_symbols("hello world"))
 
-
-
-count_symbols("hello world")
 # Отфильтровать только уникальные элементы, сохранив порядок
 # [1,2,2,3,1] → [1,2,3]
 def check_unique(lst):
@@ -46,12 +46,64 @@ def check_unique(lst):
 check_unique([1,2,2,3,1])
 # Найти второй по величине элемент в списке
 # (с учетом дублей)
-#
+def check_second_max(lst):
+    if not lst or len(lst) < 2:
+        return None
+    max_number = max(lst)
+    second_max = None
+    for number in lst:
+        if number < max_number:
+            if second_max is None or number > second_max:
+                second_max = number
+
+    return second_max
+print(check_second_max([1, 2, 4, 6, 1]))
+print(check_second_max([6, 6, 5, 4]))
+print(check_second_max([5, 5, 5, 5]))
+print(check_second_max([1]))
+print(check_second_max([]))
+print(check_second_max([-5, -5, -10]))
+
+
 # Проверить, что список отсортирован по возрастанию
-#
+def check_sort_list(lst):
+    if len(lst) <= 1:
+        return True
+    for i in range(len(lst) - 1):
+        current = lst[i]
+        next_ = lst[i + 1]
+        if current > next_:
+            return False
+    else:
+        return True
+
+print(check_sort_list([2, 3, 4, 6, 3]))
+print(check_sort_list([]))
+print(check_sort_list([5]))
+print(check_sort_list([1,2,3,4]))
+print(check_sort_list([1,2,1,4]))
+print(check_sort_list([7, 7, 7, 7]))
+print(check_sort_list(["a", "h", "c"]))
+print(check_sort_list(["a", "b", "c"]))
+
+
+
 # Сгруппировать список слов по первой букве
 # ["cat","car","dog"] → {"c":["cat","car"],"d":["dog"]}
-#
+def check_first_symbol(lst):
+    new_lst = {}
+    for i in range(len(lst)):
+        first_str = lst[i]
+        first_symbol = first_str[0]
+        if first_symbol in new_lst:
+            new_lst[first_symbol].append(first_str)
+        else:
+            new_lst[first_symbol] = [first_str]
+
+    return new_lst
+
+print(check_first_symbol(["cat","car","dog"]))
+
 # На что смотрят:
 # чистота кода
 # использование стандартных структур
