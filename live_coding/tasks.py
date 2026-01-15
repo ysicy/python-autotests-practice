@@ -4,7 +4,7 @@
 # Найти дубликаты в списке чисел
 # Вход: [1,2,3,2,4,1]
 # Выход: {1,2}
-from shlex import split
+
 
 
 def find_duplicates(lst):
@@ -113,18 +113,66 @@ print(check_first_symbol(["cat","car","dog"]))
 # Задачи:
 # Проверить, является ли строка палиндромом
 # (игнорируя регистр и пробелы)
-#
+def is_palindrome(string: str) -> bool:
+    s = string.lower()
+    only_chrs = [ch for ch in s if ch.isalnum()]
+    only_str = ''.join(only_chrs)
+    return only_str == only_str[::-1]
+print(is_palindrome("У лип Лёша нашёл пилу"))
+print(is_palindrome("A man a plan a canal Panama"))
+print(is_palindrome("Madam, I'm Adam"))
+print(is_palindrome(""))
+assert is_palindrome("a") == True
+assert is_palindrome(" ") == True
+
 # Найти первое неповторяющееся значение в строке
 # "aabbccd" → "d"
-#
+def one_symbol_only(s):
+    count = {}
+    for char in s:
+        if char in count:
+            count[char]+=1
+        else:
+            count[char]=1
+    for char in s:
+        if count[char] == 1:
+            return char
+
+    return None
+
+print(one_symbol_only("aabbccd"))
+print(one_symbol_only("aabbcc"))
+print(one_symbol_only("abc"))
+print(one_symbol_only(""))
+
 # Проверить валидность скобочной последовательности
 # "(()())" → True
 #
 # Удалить все дубликаты символов из строки
 # "banana" → "ban"
-#
+def delete_duplicates(s):
+    original = ''
+    for symbol in s:
+        if symbol not in original:
+            original+=symbol
+    return original
+print(delete_duplicates("banana"))
+
 # Найти самое длинное слово в строке
-#
+# "Hello my friend" - "friend"
+def find_longest_string(s):
+    max_length = 0
+    longest_word = ""
+    for word in s.split():
+        clean_word = ''.join(ch for ch in word if ch.isalnum())
+        if len(clean_word) > max_length:
+            max_length = len(clean_word)
+            longest_word = clean_word
+    return longest_word
+
+print(find_longest_string("Hello my friend!"))
+print(find_longest_string("cat dog fox"))
+
 # На что смотрят:
 # методы строк
 # аккуратность
