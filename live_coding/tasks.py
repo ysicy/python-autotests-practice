@@ -4,7 +4,9 @@
 # Найти дубликаты в списке чисел
 # Вход: [1,2,3,2,4,1]
 # Выход: {1,2}
+import json
 
+import pytest
 
 
 def find_duplicates(lst):
@@ -147,7 +149,22 @@ print(one_symbol_only(""))
 
 # Проверить валидность скобочной последовательности
 # "(()())" → True
-#
+def is_correct_bracket(text):
+    total_=0
+    for symbol in text:
+        if symbol=='(':
+            total_+=1
+        elif symbol==')':
+            total_-=1
+            if total_<0:
+                return False
+    if total_==0:
+        return True
+    else:
+        return False
+
+
+print(is_correct_bracket("(()())"))
 # Удалить все дубликаты символов из строки
 # "banana" → "ban"
 def delete_duplicates(s):
@@ -182,14 +199,67 @@ print(find_longest_string("cat dog fox"))
 #
 # Задачи:
 # Прочитать текстовый файл и посчитать количество строк
-#
+def read_and_count_lines_in_file(file_path):
+    with open(file_path, "r",encoding="utf-8") as file:
+        lines = file.readlines()
+        return f"Количество строк в файле: {len(lines)}"
+        # for i, line in enumerate(lines):
+        #     print(f"Строка {i+1}: {line}")
+
+count = read_and_count_lines_in_file("live_coding/test.txt")
+print(count)
 # Прочитать JSON и проверить наличие обязательных ключей
 # (id, name, email)
+def check_keys_in_json(file_path) -> bool:
+    try:
+        with open(file_path, "r",encoding="utf-8") as file:
+            data = json.load(file)
+
+            required = ["id", "name", "email"]
+            for key in required:
+                if key not in data:
+                    print(f"Missing key {key} in json file")
+                    return False
+
+            return True
+
+    except FileNotFoundError:
+        print(f"json file not found: {file_path}")
+        return False
+    except json.JSONDecodeError:
+        print("Invalid json file")
+        return False
+check_keys_in_json("live_coding/user_data.json")
+
+
 #
 # Прочитать CSV и посчитать количество строк, где status = "ERROR"
 #
 # Записать словарь в JSON-файл
-#
+def record_to_json(file_path):
+    data = {'title': 'AlexTEst', 'bim': "bam"}
+    try:
+        with open(file_path, "r",encoding="utf-8") as file:
+            current_adata = json.load(file)
+        current_adata.update(data)
+
+        with open(file_path, "w",encoding="utf-8") as file:
+            json.dump(current_adata, file,  indent=4)
+        print("JSON файл обноввлен")
+        return True
+    except FileNotFoundError as e:
+        print(f"not found file, error: {e}")
+        return False
+    except Exception as e:
+        print(e)
+        return False
+
+
+record_to_json("live_coding/user_data.json")
+
+
+
+
 # Найти самое частое значение в колонке CSV
 #
 # На что смотрят:
@@ -202,9 +272,35 @@ print(find_longest_string("cat dog fox"))
 # Задачи:
 #
 # Написать pytest-тест для функции add(a, b)
-#
+def add(a, b):
+    return a + b
+class TestAddFunction:
+
+    def test_add(self):
+        assert add(2,4) == 6
+        assert add(3,7) == 10
+        assert add(0.1,0.2) == pytest.approx(0.3)
+
 # Использовать параметризацию для проверки нескольких кейсов
-#
+    @pytest.mark.parametrize("a, b, result",[
+        (3,5,8),
+        (-3,-4,-7),
+        (7,7,14),
+        (0.2, 0.4, pytest.approx(0.6))
+    ])
+    def test_add_parametrize(self,a,b,result):
+        assert add(a,b) == result
+
+    def test_negative(self):
+        assert add(-2,4) == 2
+        assert add(-3,7) == 4
+
+    def test_zero(self):
+        assert add(0,0) == 0
+
+
+
+
 # Создать фикстуру, возвращающую тестового пользователя
 #
 # Протестировать функцию, которая может выбросить исключение
