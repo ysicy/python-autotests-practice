@@ -7,6 +7,7 @@
 import json
 
 import pytest
+import requests
 
 
 def find_duplicates(lst):
@@ -233,7 +234,7 @@ check_keys_in_json("live_coding/user_data.json")
 
 
 #
-# Прочитать CSV и посчитать количество строк, где status = "ERROR"
+# Прочитать CSV и посчитать количество строк, где status = "ERROR" - сделаю позже
 #
 # Записать словарь в JSON-файл
 def record_to_json(file_path):
@@ -257,11 +258,6 @@ def record_to_json(file_path):
 
 record_to_json("live_coding/user_data.json")
 
-
-
-
-# Найти самое частое значение в колонке CSV
-#
 # На что смотрят:
 # базовый I/O
 # обработка ошибок
@@ -298,11 +294,34 @@ class TestAddFunction:
     def test_zero(self):
         assert add(0,0) == 0
 
-
-
-
 # Создать фикстуру, возвращающую тестового пользователя
-#
+@pytest.fixture(scope="session")
+def my_admin_login():
+    test_data = {
+        "username": "AlexTest",
+        "password": "Alex2301"
+    }
+
+    response = requests.post("http://localhost:8080/api/auth/login", json=test_data)
+    token = response.json()['token']
+    return {"Authorization": f"Bearer {token}"}
+
+@pytest.fixture()
+def create_user(my_admin_login):
+    test_data = {
+        "username": "AlexQ",
+        "email": "alex@ru",
+        "password": "Andrew123"
+    }
+    response = requests.post("http://localhost:8080/api/auth/register", json=test_data)
+    user =  response.json()
+
+    yield user
+
+    requests.delete(
+        f"http://localhost:8080/api/users/{user['id']}",
+        headers=my_admin_login
+    )
 # Протестировать функцию, которая может выбросить исключение
 #
 # Замокать функцию, возвращающую текущее время (time.time)
