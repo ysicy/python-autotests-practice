@@ -6,6 +6,7 @@
 # Выход: {1,2}
 import json
 
+
 import pytest
 import requests
 
@@ -323,8 +324,23 @@ def create_user(my_admin_login):
         headers=my_admin_login
     )
 # Протестировать функцию, которая может выбросить исключение
-#
-# Замокать функцию, возвращающую текущее время (time.time)
+def division_by_zero(a, b):
+    if b == 0:
+        raise ZeroDivisionError("division by zero")
+    return a / b
+
+def test_division_by_zero():
+    with pytest.raises(ZeroDivisionError) as e:
+        division_by_zero(10, 0)
+
+    assert "division by zero" in str(e.value)
+
+def test_division_by_positive():
+    assert division_by_zero(10, 2) == 5
+    result = division_by_zero(10,3)
+    assert round(result,2) == 3.33
+    assert division_by_zero(10, 3) == pytest.approx(3.33, 0.01)
+# Замокать функцию, возвращающую текущее время (time.time) - МИНУС МНЕ ПОКА ЧТО ТУТ
 #
 # На что смотрят:
 # структуру теста
@@ -335,16 +351,89 @@ def create_user(my_admin_login):
 #
 # Задачи:
 # Написать тест на GET-запрос
+def test_get(my_admin_login):
+    response = requests.get("http://localhost:8080/api/orders/506", headers=my_admin_login)
+    print(response.text)
+    assert response.status_code == 200
+    print("Все заголовки ответа:")
+    print(response.headers.items())
+    order = response.json()
+    required_fields = ['id', 'user', 'status', 'ingredients', 'createdAt']
+
+    for field in required_fields:
+        assert field in order
+
+    assert isinstance(order['id'], int)
+    assert isinstance(order['ingredients'], list)
+    assert isinstance(order['user'], dict)
+
+    ingredients = order['ingredients']
+    assert ingredients[0]['id'] == 536
+    assert ingredients[0]['name'] == 'Ингредиент-ask-758041'
+    assert ingredients[0]['quantity'] == 9
+
+def test_get_ingredients_id(my_admin_login):
+    response = requests.get("http://localhost:8080/api/ingredients/536", headers=my_admin_login)
+    assert response.status_code == 200
+    ingredient = response.json()
+    required_fields = ['id', 'name', 'quantity']
+    for field in required_fields:
+        assert field in ingredient
+
+
+    assert isinstance(ingredient['name'], str)
+    assert isinstance(ingredient['quantity'], int)
+    assert isinstance(ingredient['id'], int)
+    assert 'application/json' in response.headers.get('Content-Type',' ')
+    assert 'keep-alive' in response.headers.get('Connection',' ')
+
 # Проверить:
 # статус
 # тип данных
 # обязательные поля
 #
 # Написать тест на POST-запрос (создание сущности)
-#
+# Проверить, что данные реально создались (GET после POST)
+def test_create_ingredient(my_admin_login):
+    data = {
+        "name": "Alex_ingredient23",
+        "quantity": 10,
+    }
+    response = requests.post("http://localhost:8080/api/ingredients", json=data,headers=my_admin_login)
+    assert response.status_code == 200
+    print(response.text)
+    created_ingredient = response.json()
+    assert 'id' in created_ingredient
+    assert created_ingredient['name'] == data['name']
+    assert created_ingredient['quantity'] == data['quantity']
+    assert 'application/json' in response.headers.get('Content-Type', '')
+
+
+    id = created_ingredient['id']
+    get_response = requests.get(f"http://localhost:8080/api/ingredients/{id}", headers=my_admin_login)
+    assert get_response.status_code == 200
+    ingredient = get_response.json()
+    required_fields = ['id', 'name', 'quantity']
+    for field in required_fields:
+        assert field in ingredient
+
+    delete_ingredient = requests.delete(f"http://localhost:8080/api/ingredients/{id}", headers=my_admin_login)
+    assert delete_ingredient.status_code == 204
+
+def test_incorrect_create_ingredient(my_admin_login):
+    data = {
+        "name": "Alex_ingredient2123",
+        "quantity": "10",
+    }
+    response = requests.post("http://localhost:8080/api/ingredients")
+    assert response.status_code == 403
+
+
+
+
 # Проверить негативный кейс (401 / 400)
 #
-# Проверить, что данные реально создались (GET после POST)
+
 #
 # Использовать фикстуру для авторизации
 #
