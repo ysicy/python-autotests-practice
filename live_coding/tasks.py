@@ -9,6 +9,11 @@ import json
 
 import pytest
 import requests
+from playwright.sync_api import sync_playwright, expect
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 def find_duplicates(lst):
@@ -420,6 +425,7 @@ def test_create_ingredient(my_admin_login):
     delete_ingredient = requests.delete(f"http://localhost:8080/api/ingredients/{id}", headers=my_admin_login)
     assert delete_ingredient.status_code == 204
 
+# Проверить негативный кейс (403 / 400)
 def test_incorrect_create_ingredient(my_admin_login):
     data = {
         "name": "Alex_ingredient2123",
@@ -429,14 +435,6 @@ def test_incorrect_create_ingredient(my_admin_login):
     assert response.status_code == 403
 
 
-
-
-# Проверить негативный кейс (401 / 400)
-#
-
-#
-# Использовать фикстуру для авторизации
-#
 # На что смотрят:
 # структура теста
 # осмысленные проверки
@@ -462,13 +460,46 @@ def test_incorrect_create_ingredient(my_admin_login):
 #
 # Задачи:
 # Написать сценарий логина на сайт
-#
+# ДЕЛАЮ НА СЕЛЕНИЕУМЕ
+def test_login_selenium():
+    driver = webdriver.Chrome()
+
+    try:
+        driver.get("http://localhost:5173/login")
+        login_input = driver.find_element(By.XPATH,"//input[@id='login-username']")
+        login_input.send_keys("AlexTest")
+        password_input = driver.find_element(By.XPATH,"//input[@id='login-password']")
+        password_input.send_keys("Alex2301")
+        submit_btn = driver.find_element(By.XPATH,"//button[@id='login-submit']")
+        submit_btn.click()
+        WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "h4")))
+        header = driver.find_element(By.XPATH, "//span[text()='AlexTest']")
+        assert header.text == "AlexTest"
+
+    finally:
+        driver.quit()
+
+# тест на авторизацию на плейврайте
+def test_login_playwright():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        context = browser.new_context()
+        page = context.new_page()
+
+        try:
+            page.goto("http://localhost:5173/login")
+            page.fill("//input[@id='login-username']", "AlexTest")
+            page.fill("//input[@id='login-password']", "Alex2301")
+            page.click("//button[@id='login-submit']")
+            user_header = page.locator("//span[text()='AlexTest']")
+            user_header.wait_for(state="visible", timeout=10000)
+            expect(user_header).to_have_text("AlexTest")
+
+        finally:
+            browser.close()
+
+
 # Проверить, что после логина отображается имя пользователя
-#
-# Кликнуть кнопку и проверить изменение текста
-#
-# Найти все ссылки на странице и проверить, что их больше N
-#
 # Реализовать ожидание элемента (не sleep)
 #
 # На что смотрят:
@@ -480,13 +511,33 @@ def test_incorrect_create_ingredient(my_admin_login):
 #
 # Задачи:
 # Функция принимает список — что будет, если:
+def check_lst(lst):
+    return lst
+
+def test_one():
+    print(check_lst(None)) # None - вернет None
+
+def test_two():
+    print(check_lst([])) # пустой список
+
+def test_three():
+    print(check_lst([1])) # один элемент - Вернет один элемент
+# список пуст - пустйо список
+# None - вернет None
+# один элемент - Вернет один элемент
 #
-# список пуст
-# None
-# один элемент
+# 1.API возвращает 200, но тело пустое — что проверять? - Свериться с документацией,
+# гет - возвращает данные
+# post - статус код 201 должен быть
+# put/patch - 200, но ресурс должны возвращать
+# delete - тут не подойдет, статус 204 должен приходить
+# Основное, что нужно проверить - это заголовки Content-type и Content-length
 #
-# API возвращает 200, но тело пустое — что проверять?
-#
-# UI элемент есть в DOM, но не видим — как обработать?
-#
-# Что проверять кроме status_code == 200?
+# 2.UI элемент есть в DOM, но не видим — как обработать?
+#На примере сортирровки по полю - по умолчанию стоит фильтр по дате созданию, но можно сортировать по имени,почте и роли.
+# Получается нужно взять главные элемент в котором содержится список этих элементов, написать ожидаемый список в переменную
+# сравнить полученный список с ожидаемым
+# 3. Что проверять кроме status_code == 200?
+# что обязательные поля присутствуют в ответе
+# длина объекта > 0
+# можно провалиться по ключу и сравнить полученное значение с отправленным
