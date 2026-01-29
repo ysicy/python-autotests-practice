@@ -63,7 +63,15 @@ print(find_all_pairs([1,2,3,4,5,0],5))
 # Найти «провал»:
 #
 # [1,2,3,7,8] → 4,5,6
-#
+def test_bim():
+    lst = [1,2,3,7,8]
+    lst[1], lst[3] = lst[3], lst[1]
+    print(lst)
+
+def test_2():
+    a = [[]]*3
+    a[1].append(1)
+    print(a)
 #
 # 8.
 # Удалить из списка всё, что встречается более одного раза.
@@ -133,3 +141,16 @@ print(find_all_pairs([1,2,3,4,5,0],5))
 # 20.
 # API возвращает 200 и пустой body.
 # Что это значит? Какие гипотезы?
+lst = [int(i) for i in input().split()]
+c = 0
+
+for i in range(1, len(lst)):
+    if lst[i] > lst[i - 1]:
+        c += 1
+
+print(c)
+
+
+
+
+
