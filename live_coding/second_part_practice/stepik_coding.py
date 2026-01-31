@@ -32,21 +32,21 @@ count_ints('1 2 4 5')
 # Формат выходных данных
 # Программа должна вывести ДА или НЕТ в соответствии с условием задачи.
 
-# def bim_bim_bam_bam():
-#     n = int(input())
-#     lst =[]
-#     for i in range(n):
-#         ints = int(input())
-#         lst.append(ints)
-#     b = int(input())
-#     no = "НЕТ"
-#     for j in range(len(lst)):
-#         for k in range(len(lst)):
-#             if j != k and lst[j] * lst[k] == b:
-#                 no = "ДА"
-#     print(no)
-#
-# bim_bim_bam_bam()
+def bim_bim_bam_bam():
+    n = int(input())
+    lst =[]
+    for i in range(n):
+        ints = int(input())
+        lst.append(ints)
+    b = int(input())
+    no = "НЕТ"
+    for j in range(len(lst)):
+        for k in range(len(lst)):
+            if j != k and lst[j] * lst[k] == b:
+                no = "ДА"
+    print(no)
+
+bim_bim_bam_bam()
 
 # Формат входных данных
 # На вход программе подаются две строки текста, содержащие слова "камень", "ножницы" или "бумага".
@@ -54,40 +54,40 @@ count_ints('1 2 4 5')
 # Формат выходных данных
 # Программа должна вывести результат жеребьевки, то есть кто победит: Тимур, Руслан или же они сыграют вничью.
 
-# def kamen_noj_paper():
-#     choose_timur = input()
-#     choose_ruslan = input()
-#     if choose_timur == 'камень' and choose_ruslan == 'бумага':
-#         print('Руслан')
-#     if choose_timur == 'бумага' and choose_ruslan == 'ножницы':
-#         print('Руслан')
-#     if choose_timur == 'ножницы' and choose_ruslan == 'камень':
-#         print('Руслан')
-#     if choose_timur == 'камень' and choose_ruslan == 'ножницы':
-#         print('Тимур')
-#     if choose_timur == 'ножницы' and choose_ruslan == 'бумага':
-#         print('Тимур')
-#     if choose_timur == 'бумага' and choose_ruslan == 'камень':
-#         print('Тимур')
-#     if choose_timur == choose_ruslan:
-#         print('ничья')
-# kamen_noj_paper()
+def kamen_noj_paper():
+    choose_timur = input()
+    choose_ruslan = input()
+    if choose_timur == 'камень' and choose_ruslan == 'бумага':
+        print('Руслан')
+    if choose_timur == 'бумага' and choose_ruslan == 'ножницы':
+        print('Руслан')
+    if choose_timur == 'ножницы' and choose_ruslan == 'камень':
+        print('Руслан')
+    if choose_timur == 'камень' and choose_ruslan == 'ножницы':
+        print('Тимур')
+    if choose_timur == 'ножницы' and choose_ruslan == 'бумага':
+        print('Тимур')
+    if choose_timur == 'бумага' and choose_ruslan == 'камень':
+        print('Тимур')
+    if choose_timur == choose_ruslan:
+        print('ничья')
+kamen_noj_paper()
 
 # гениальное решение,забрал себе
-# def genius():
-#     x, y = input(), input()
-#     var = ['камень', 'ножницы', 'бумага']
-#     ans = ['ничья', 'Руслан', 'Тимур']
-#     print(ans[var.index(x) - var.index(y)])
+def genius():
+    x, y = input(), input()
+    var = ['камень', 'ножницы', 'бумага']
+    ans = ['ничья', 'Руслан', 'Тимур']
+    print(ans[var.index(x) - var.index(y)])
 
 
 #На вход программе подается строка текста, состоящая из букв русского алфавита "О" и "Р".
 # Программа должна вывести наибольшее количество подряд выпавших Решек.
-# def  check_count_symbols():
-#     text = input().split('О')
-#     print(len(max(text)))
-#
-# check_count_symbols()
+def  check_count_symbols():
+    text = input().split('О')
+    print(len(max(text)))
+
+check_count_symbols()
 
 def find_anton():
     n = int(input())
@@ -105,8 +105,34 @@ def find_anton():
     print(*result)
 find_anton()
 
-def  check_symbols():
-    b = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х',
+def check_symbols():
+    word = input() + ' запретил букву'
+    alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х',
          'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я']
 
+    for char in alphabet:
 
+        if char in word:
+            print(word,char)
+            word = word.replace(char, '')
+            word = ' '.join(word.split())
+            if not word:
+                break
+
+check_symbols()
+
+# объявление функции
+def func(num1, num2):
+    if  num1 % num2 == 0:
+        return True
+    elif num2 % num1 != 0:
+        return False
+
+# считываем данные
+num1, num2 = int(input()), int(input())
+
+# вызываем функцию
+if func(num1, num2):
+    print('делится')
+else:
+    print('не делится')
