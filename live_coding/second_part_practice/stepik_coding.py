@@ -136,3 +136,9 @@ if func(num1, num2):
     print('делится')
 else:
     print('не делится')
+
+list1 =input()
+maxim = []
+for i in list1:
+    maxim.append(max(i))
+print(max(maxim))
